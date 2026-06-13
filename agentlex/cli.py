@@ -32,6 +32,25 @@ def _demo() -> int:
     return 0
 
 
+def _reason() -> int:
+    from agentlex.kb import KnowledgeBase
+    kb = KnowledgeBase()
+    for f in ["risk(vessel-1, high)", "location(vessel-1, hormuz)", "risk(vessel-2, low)"]:
+        kb.assert_fact(parse_term(f))
+    # conjunctive query: a high-risk vessel AND where it is
+    res = kb.query([parse_term("risk(?v, high)"), parse_term("location(?v, ?where)")])
+    print("facts asserted:", len(kb.facts))
+    for s in res:
+        print("  match: ?v =", s["v"], "  ?where =", s["where"])
+    # a rule: high-risk + in a chokepoint => watchlist it
+    kb.assert_fact(parse_term("chokepoint(hormuz)"))
+    kb.add_rule(parse_term("watchlist(?v)"),
+                [parse_term("risk(?v, high)"), parse_term("location(?v, ?c)"), parse_term("chokepoint(?c)")])
+    derived = kb.infer()
+    print("derived by forward-chaining:", [str(d) for d in derived])
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="agentlex", description=__doc__.splitlines()[0])
     p.add_argument("--version", action="version", version=f"agentlex {__version__}")
@@ -40,6 +59,7 @@ def main(argv: list[str] | None = None) -> int:
     su = sub.add_parser("unify"); su.add_argument("a"); su.add_argument("b")
     sm = sub.add_parser("msg"); sm.add_argument("wire")
     sub.add_parser("demo")
+    sub.add_parser("reason")
     args = p.parse_args(argv)
 
     try:
@@ -54,6 +74,8 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(from_wire(args.wire).to_dict(), indent=2))
         elif args.cmd == "demo":
             return _demo()
+        elif args.cmd == "reason":
+            return _reason()
     except (ParseError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr); return 1
     return 0

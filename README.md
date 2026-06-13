@@ -46,6 +46,31 @@ s = unify(pattern, fact.content)
 print(substitute(parse_term("?v"), s))   # Symbol('vessel-9')
 ```
 
+## Reason over what you're told
+
+Speaking is half of it — agents also need to *reason* over what they hear. The
+`KnowledgeBase` stores the content of `inform` messages and answers queries by
+unification, including **conjunctive (joined) queries** and **forward-chaining rules**:
+
+```python
+from agentlex import KnowledgeBase, parse_term
+
+kb = KnowledgeBase()
+for f in ["risk(vessel-1, high)", "location(vessel-1, hormuz)", "chokepoint(hormuz)"]:
+    kb.assert_fact(parse_term(f))
+
+# join on a shared variable: a high-risk vessel AND where it is
+kb.query([parse_term("risk(?v, high)"), parse_term("location(?v, ?where)")])
+# -> [{v: vessel-1, where: hormuz}]
+
+# a rule: high-risk + sitting in a chokepoint => watchlist it
+kb.add_rule(parse_term("watchlist(?v)"),
+            [parse_term("risk(?v, high)"), parse_term("location(?v, ?c)"), parse_term("chokepoint(?c)")])
+kb.infer()                       # -> [watchlist(vessel-1)]
+```
+
+`agentlex reason` runs this end-to-end.
+
 ## What's in the box
 
 - **`terms.py`** — `Symbol` / `Var` / `Literal` / `Compound`, with first-order
