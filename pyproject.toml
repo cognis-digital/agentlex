@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agentlex"
-version = "0.2.0"
+version = "0.2.1"
 description = "A symbolic agent-to-agent language — speech acts + unifiable symbolic terms"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -24,9 +24,11 @@ dependencies = []
 Homepage = "https://github.com/cognis-digital/agentlex"
 
 [project.scripts]
+"agentlex-emit" = "agentlex.connect:emit_main"
 agentlex = "agentlex.cli:main"
 
 [project.optional-dependencies]
+connect = ["cognis-connect @ git+https://github.com/cognis-digital/cognis-connect.git"]
 dev = ["pytest>=7"]
 
 [tool.hatch.build.targets.wheel]
