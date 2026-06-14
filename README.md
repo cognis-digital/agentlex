@@ -100,6 +100,11 @@ kb.infer()                       # -> [watchlist(vessel-1)]
   orchestrate multi-agent workflows · [`engram`](https://github.com/cognis-digital/engram) —
   durable agent memory · [`edgemesh`](https://github.com/cognis-digital/edgemesh) — transport.
 
+## Integrations
+
+Forward `agentlex`'s findings to STIX/MISP/Sigma/Splunk/Elastic/Slack/webhooks via
+[`cognis-connect`](https://github.com/cognis-digital/cognis-connect). See **[INTEGRATIONS.md](INTEGRATIONS.md)**.
+
 ## License
 Cognis Open Collaboration License (COCL) 1.0 — see [LICENSE](LICENSE).
 
