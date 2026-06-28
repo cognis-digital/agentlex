@@ -23,6 +23,59 @@ Pure standard library. Drops onto any transport — an [edgemesh](https://github
 `/v1` stream, MCP, a queue, a socket.
 
 <!-- cognis:domains:start -->
+
+<!-- cognis:example:start -->
+## 🔎 Example output
+
+Real, reproducible output from the tool — runs offline:
+
+```console
+$ agentlex-emit --help
+usage: agentlex-emit [-h]
+                     --to {stix,taxii,misp,sigma,splunk,elastic,slack,discord,webhook,brief,findings}
+                     [--url URL] [--token TOKEN] [--dry-run]
+                     [input]
+
+forward agentlex JSON findings to a platform via cognis-connect
+
+positional arguments:
+  input                 findings JSON file (default: stdin)
+
+options:
+  -h, --help            show this help message and exit
+  --to {stix,taxii,misp,sigma,splunk,elastic,slack,discord,webhook,brief,findings}
+  --url URL
+  --token TOKEN
+  --dry-run
+```
+
+> Blocks above are real `agentlex` output — reproduce them from a clone.
+
+**Sample result format** _(illustrative values — run on your own data for real findings):_
+
+```
+{
+"Findings": [
+    {
+        "id": "1234567890",
+        "title": "Suspicious Network Traffic",
+        "description": "Potential malicious activity detected on port 443.",
+        "categories": ["Network", "Malware"],
+        "created_at": "2023-02-20T14:30:00Z"
+    },
+    {
+        "id": "2345678901",
+        "title": "Unusual File Access",
+        "description": "An unknown process accessed a sensitive file.",
+        "categories": ["File", "Privilege Escalation"],
+        "created_at": "2023-02-20T14:35:00Z"
+    }
+]
+}
+```
+
+<!-- cognis:example:end -->
+
 ## Domains
 
 **Primary domain:** AI & ML  ·  **JTF MERIDIAN division:** ATHENA-PRIME · SAGE
